@@ -14,6 +14,9 @@ public class Tarea {
 	@GeneratedValue
 	private Long id;
 	private String nombre;
+	private Long idEstado;
+	private Long idTipoTarea;
+
 	private Double horasAsignadas;
 	
 	@ManyToOne
@@ -32,6 +35,9 @@ public class Tarea {
 	@JoinColumn(name = "TAREA_ID")
 	private Set<Comentario> comentarios = new HashSet<Comentario>();
 	
+	public void agregarUsuario(Usuario usuario){
+		usuarios.add(usuario);
+	}
 	
 	public Proyecto getProyecto() {
 		return proyecto;
@@ -57,21 +63,6 @@ public class Tarea {
 		comentarios = comentarios;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
 
 	public Double getHorasAsignadas() {
 		return horasAsignadas;
@@ -96,6 +87,40 @@ public class Tarea {
 
 	public void setEstado(EstadoDeTarea estado) {
 		this.estado = estado;
+	}
+
+
+
+	public Long getIdEstado() {
+		return idEstado;
+	}
+
+	public void setIdEstado(Long idEstado) {
+		this.idEstado = idEstado;
+	}
+
+	public Long getIdTipoTarea() {
+		return idTipoTarea;
+	}
+
+	public void setIdTipoTarea(Long idTipoTarea) {
+		this.idTipoTarea = idTipoTarea;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
 	@Override
@@ -128,7 +153,6 @@ public class Tarea {
 			return false;
 		return true;
 	}
+}
 
 	
-	
-}

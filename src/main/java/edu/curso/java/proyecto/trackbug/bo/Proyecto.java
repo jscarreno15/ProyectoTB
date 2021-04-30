@@ -12,9 +12,15 @@ public class Proyecto {
 	@GeneratedValue
 	private Long id;
 	private String nombre;
+	private Double horasAsignadasProyecto;
+	private Long idUsuarioResponsable;
 	
 	@OneToMany(mappedBy = "proyecto")
 	private Set<Tarea> tareas = new HashSet<Tarea>();
+	
+	public void agregarTarea(Tarea tarea) {
+		tareas.add(tarea);
+	}
 	
 	@ManyToOne
 	private Usuario usuarioResponsable;
@@ -22,7 +28,14 @@ public class Proyecto {
 	@ManyToMany
 	private Set<Usuario> usuarios = new HashSet<Usuario>();
 		
-	private Double horasAsignadasProyecto;
+
+	public Long getIdUsuarioResponsable() {
+		return idUsuarioResponsable;
+	}
+
+	public void setIdUsuarioResponsable(Long idUsuarioResponsable) {
+		this.idUsuarioResponsable = idUsuarioResponsable;
+	}
 
 	public Double getHorasAsignadasProyecto() {
 		return horasAsignadasProyecto;

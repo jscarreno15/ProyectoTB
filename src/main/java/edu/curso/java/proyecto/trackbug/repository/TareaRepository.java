@@ -16,9 +16,9 @@ public interface TareaRepository extends CrudRepository <Tarea , Long> {
 	public Double buscarHorasAsignadas(@Param(value = "idProyecto") Long idProyecto);
 	
 	@Query(value = "from Tarea t  where t.nombre like : nombre")
-	public Set<Tarea> buscadorDeTareas(@Param("nombre") String nombre);
+	public List<Tarea> buscadorDeTareas(@Param("nombre") String nombre);
 	
 	@Query(value = "from Tarea t where t.proyecto.id = :idProyecto")
-	public Set<Tarea> tareasPorProyecto(@Param("idProyecto") Long idProyecto);
+	public List<Tarea> tareasPorProyecto(@Param("idProyecto") Long idProyecto);
 	
 }

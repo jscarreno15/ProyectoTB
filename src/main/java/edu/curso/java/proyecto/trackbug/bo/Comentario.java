@@ -17,15 +17,25 @@ public class Comentario {
 	private Long id;
 	private String nombre;
 	private Date fecha;
+	private String texto;
 	
 	@ManyToOne
 	private Usuario creadoPor;
+	
+
 	
 	public Usuario getCreadoPor() {
 		return creadoPor;
 	}
 	public void setCreadoPor(Usuario creadoPor) {
 		this.creadoPor = creadoPor;
+	}
+	
+	public String getTexto() {
+		return texto;
+	}
+	public void setTexto(String texto) {
+		this.texto = texto;
 	}
 	public Long getId() {
 		return id;
