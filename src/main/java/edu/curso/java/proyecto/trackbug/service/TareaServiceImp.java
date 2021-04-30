@@ -81,10 +81,10 @@ public class TareaServiceImp implements TareaService{
 		return tareaRepository.tareasPorProyecto(idProyecto);
 	}
 
-
-
-	
-	
+	@Override
+	public void actualizarTarea(Tarea tarea) {
+		tareaRepository.save(tarea);
+	}
 
 	
 }

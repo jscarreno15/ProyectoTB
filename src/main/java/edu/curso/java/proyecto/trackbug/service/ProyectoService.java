@@ -17,5 +17,5 @@ public interface ProyectoService {
 	public Proyecto listarProyectosPorId(Long id);
 	public List<Proyecto> buscadorDeProyectos(String nombre);
 	public void asignarUsuario(Long id, Long idUsuario);
-
+	public void actualizarProyecto(Proyecto proyecto);
 }

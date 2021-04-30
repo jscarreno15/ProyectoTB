@@ -72,6 +72,18 @@ public class TareaRestController {
 		return ResponseEntity.ok(tareaDTO);
 	}
 	
+	@PutMapping(path = "/{id}")
+	public ResponseEntity actualizarTarea(@PathVariable Long id, @RequestBody TareaDTO tareaDTO) {
+		Tarea tarea= tareaService.listarTareasPorId(id);
+		tarea.setId(tareaDTO.getId());
+		tarea.setHorasAsignadas(tareaDTO.getHorasAsignadas());
+		tarea.setIdEstado(tareaDTO.getIdEstado());
+		tarea.setIdTipoTarea(tareaDTO.getIdTipoTarea());
+		tareaService.actualizarTarea(tarea);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+	
 	@PutMapping(path = "/{id}/asignarusuario/{idUsuario}")
 	public ResponseEntity <Long> asignarUsuario(@PathVariable Long id ,@PathVariable Long idUsuario){
 		tareaService.asignarUsuario(id, idUsuario);

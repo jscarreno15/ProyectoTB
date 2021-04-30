@@ -17,4 +17,5 @@ public interface TareaService {
 	public List<Tarea> buscadorDeTareas(String nombre);
 	public void asignarUsuario(Long id, Long idUsuario);
 	public List<Tarea> listarTareasPorProyecto(Long idProyecto);
+	public void actualizarTarea(Tarea tarea);
 }

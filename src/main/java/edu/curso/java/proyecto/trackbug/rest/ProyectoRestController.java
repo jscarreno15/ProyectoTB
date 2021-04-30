@@ -65,6 +65,18 @@ public class ProyectoRestController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 	
+	@PutMapping(path = "/{id}")
+	public ResponseEntity actualizarProyecto(@PathVariable Long id, @RequestBody ProyectoDTO proyectoDTO) {
+		Proyecto proyecto= proyectoService.listarProyectosPorId(id);
+		proyecto.setId(proyectoDTO.getId());
+		proyecto.setNombre(proyectoDTO.getNombre());
+		proyecto.setHorasAsignadasProyecto(proyectoDTO.getHorasAsignadasProyecto());
+		proyecto.setIdUsuarioResponsable(proyectoDTO.getIdUsuarioResponsable());
+		proyectoService.actualizarProyecto(proyecto);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+	
 	@GetMapping(path = "/{id}")//manejar excepcion si no encuentra el proyecto
 	public ResponseEntity <ProyectoDTO > listarProyectosPorId(@PathVariable Long id){
 			Proyecto proyecto = proyectoService.listarProyectosPorId(id);
@@ -83,6 +95,8 @@ public class ProyectoRestController {
 			}
 			return ResponseEntity.ok(tareasDTO);
 	}
+	
+	
 	
 	@GetMapping(path = "/buscador")
 	public ResponseEntity <List<ProyectoDTO>> buscarProyectosPorNombre(@RequestParam String nombre){

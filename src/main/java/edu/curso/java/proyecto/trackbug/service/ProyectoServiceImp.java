@@ -55,6 +55,11 @@ public class ProyectoServiceImp implements ProyectoService{
 		usuarioRepository.save(usuario);
 	}
 	
+	@Override
+	public void actualizarProyecto(Proyecto proyecto) {
+		proyectoRepository.save(proyecto	);
+	}
+	
 	
 
 }
