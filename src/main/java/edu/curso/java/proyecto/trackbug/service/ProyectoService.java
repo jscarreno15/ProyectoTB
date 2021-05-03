@@ -14,8 +14,8 @@ public interface ProyectoService {
 	public Long crearProyecto(Proyecto proyecto);
 	public void borrarProyecto(Long id);
 	public List<Proyecto> listarProyectos();
-	public Proyecto listarProyectosPorId(Long id);
-	public List<Proyecto> buscadorDeProyectos(String nombre);
-	public void asignarUsuario(Long id, Long idUsuario);
+	public Proyecto buscarProyectosPorId(Long id) throws ProyectoException;
+	public List<Proyecto> buscadorDeProyectos(String nombre)throws ProyectoException;
+	public void asignarUsuario(Long id, Long idUsuario)throws ProyectoException;
 	public void actualizarProyecto(Proyecto proyecto);
 }

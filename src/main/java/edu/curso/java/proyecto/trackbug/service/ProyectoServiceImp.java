@@ -37,18 +37,24 @@ public class ProyectoServiceImp implements ProyectoService{
 	}
 
 	@Override
-	public Proyecto listarProyectosPorId(Long id) {
-		 return  proyectoRepository.findById(id).get();
+	public Proyecto buscarProyectosPorId(Long id) throws ProyectoException {
+		if( proyectoRepository.findById(id).get() == null) 
+			throw new ProyectoException("El id ingresado no existe en base de datos");
+		return  proyectoRepository.findById(id).get();
 	}
 
 	@Override
-	public List<Proyecto> buscadorDeProyectos(String nombre) {
+	public List<Proyecto> buscadorDeProyectos(String nombre) throws ProyectoException {
+		if(proyectoRepository.buscadorDeProyectos("%" + nombre)== null)
+			throw new ProyectoException("No se encuentran coincidencias con ese nombre");
 		return proyectoRepository.buscadorDeProyectos("%" + nombre);
 	}
 	
 	@Override
-	public void asignarUsuario(Long id, Long idUsuario) {
+	public void asignarUsuario(Long id, Long idUsuario) throws ProyectoException {
 		Proyecto proyecto = proyectoRepository.findById(id).get();
+		if (usuarioRepository.findById(idUsuario).get() == null)
+			throw new ProyectoException("No existe el usuario ingresado");
 		Usuario usuario = usuarioRepository.findById(idUsuario).get();
 		proyecto.setUsuarioResponsable(usuario);
 		proyectoRepository.save(proyecto);

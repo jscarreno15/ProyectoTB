@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -51,9 +52,13 @@ public class TareaRestController {
 	
 	@GetMapping(path = "/{id}")//manejar excepcion si no encuentra el proyecto
 	public ResponseEntity <TareaDTO> listaTareasPorId(@PathVariable Long id){
-			Tarea tarea = tareaService.listarTareasPorId(id);
+			try {
+			Tarea tarea = tareaService.buscarTareasPorId(id);
 			TareaDTO tareaDTO = new TareaDTO(tarea);
 			return ResponseEntity.ok(tareaDTO);
+			}catch (Exception e) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+			}
 	}
 	
 	@DeleteMapping(path = "/{id}")
@@ -74,13 +79,17 @@ public class TareaRestController {
 	
 	@PutMapping(path = "/{id}")
 	public ResponseEntity actualizarTarea(@PathVariable Long id, @RequestBody TareaDTO tareaDTO) {
-		Tarea tarea= tareaService.listarTareasPorId(id);
+		try {
+		Tarea tarea= tareaService.buscarTareasPorId(id);
 		tarea.setId(tareaDTO.getId());
 		tarea.setHorasAsignadas(tareaDTO.getHorasAsignadas());
 		tarea.setIdEstado(tareaDTO.getIdEstado());
 		tarea.setIdTipoTarea(tareaDTO.getIdTipoTarea());
 		tareaService.actualizarTarea(tarea);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		}catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+		}
 	}
 
 	

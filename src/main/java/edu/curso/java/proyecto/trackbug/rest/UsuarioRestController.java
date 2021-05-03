@@ -54,8 +54,8 @@ public class UsuarioRestController {
 	}
 	
 	@GetMapping(path = "/{id}")
-	public ResponseEntity listarUsuariosPorId(@PathVariable Long id) {
-		Usuario usuario= usuarioService.listarUsuarioPorId(id);
+	public ResponseEntity buscarUsuariosPorId(@PathVariable Long id) {
+		Usuario usuario= usuarioService.buscarUsuarioPorId(id);
 		UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
 		return ResponseEntity.ok(usuarioDTO);
 	}
@@ -67,13 +67,13 @@ public class UsuarioRestController {
 		comentario.setNombre(comentarioDTO.getNombre());
 		comentario.setFecha(comentarioDTO.getFecha());
 		comentario.setTexto(comentarioDTO.getTexto());
-		comentario.setCreadoPor(usuarioService.listarUsuarioPorId(idUsuario));
+		comentario.setCreadoPor(usuarioService.buscarUsuarioPorId(idUsuario));
 		comentarioService.guardarComentario(comentario);
 		return ResponseEntity.ok(comentario);
 	}
 	
 	@DeleteMapping(path = "/comentario/{id}")
-	public ResponseEntity borrarProyecto(@PathVariable Long id) {
+	public ResponseEntity borrarUsuario(@PathVariable Long id) {
 		comentarioService.borrarComentario(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}

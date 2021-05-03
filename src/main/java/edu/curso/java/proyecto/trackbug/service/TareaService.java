@@ -10,12 +10,12 @@ import edu.curso.java.proyecto.trackbug.bo.TipoDeTarea;
 public interface TareaService {
 	
 	public List<Tarea> listarTareas();
-	public Tarea listarTareasPorId(Long id);
-	public Long crearTarea(Tarea tarea , Long idProyecto) throws ProyectoException;
+	public Tarea buscarTareasPorId(Long id) throws TareaException;
+	public Long crearTarea(Tarea tarea , Long idProyecto) throws TareaException;
 	public Double buscarHorasAsignadas(Long id);
 	public void borrarTarea(Long id);
 	public List<Tarea> buscadorDeTareas(String nombre);
 	public void asignarUsuario(Long id, Long idUsuario);
-	public List<Tarea> listarTareasPorProyecto(Long idProyecto);
+	public List<Tarea> buscarTareasPorProyecto(Long idProyecto);
 	public void actualizarTarea(Tarea tarea);
 }

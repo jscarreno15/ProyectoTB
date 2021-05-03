@@ -35,17 +35,19 @@ public class TareaServiceImp implements TareaService{
 	}
 
 	@Override
-	public Tarea listarTareasPorId(Long id) {
+	public Tarea buscarTareasPorId(Long id) throws TareaException {
+		if(tareaRepository.findById(id).get() == null) 
+			throw new TareaException("El id de la tarea no existe en base de datos");
 		return tareaRepository.findById(id).get();
 	}
 
 	@Override
-	public Long crearTarea(Tarea tarea , Long idProyecto )  throws ProyectoException {
+	public Long crearTarea(Tarea tarea , Long idProyecto )  throws TareaException {
 		tareaRepository.save(tarea);
 		Proyecto proyecto = proyectoRepository.findById(idProyecto).get();
 		Double horasDisponibles = proyecto.getHorasAsignadasProyecto() - tarea.getHorasAsignadas();
 		if(horasDisponibles < 0 )
-			throw new ProyectoException("Las horas de la tarea son superiores a las horas del proyecto.....");
+			throw new TareaException("Las horas de la tarea son superiores a las horas del proyecto.....");
 		proyecto.setHorasAsignadasProyecto(horasDisponibles);
 		return tareaRepository.save(tarea).getId();
 	}
@@ -77,7 +79,7 @@ public class TareaServiceImp implements TareaService{
 	}
 
 	@Override
-	public List<Tarea> listarTareasPorProyecto(Long idProyecto) {
+	public List<Tarea> buscarTareasPorProyecto(Long idProyecto) {
 		return tareaRepository.tareasPorProyecto(idProyecto);
 	}
 

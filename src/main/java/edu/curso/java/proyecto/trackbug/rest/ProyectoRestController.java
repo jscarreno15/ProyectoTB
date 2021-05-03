@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +39,7 @@ public class ProyectoRestController {
 	
 	
 	@GetMapping
+	@CrossOrigin(origins =  "http://localhost:4200")
 	public ResponseEntity <List<ProyectoDTO>> listarProyectos()	{
 		List<Proyecto> proyecto = proyectoService.listarProyectos();
 		List<ProyectoDTO> proyectoDTO = new ArrayList<ProyectoDTO>();
@@ -48,6 +50,7 @@ public class ProyectoRestController {
 	}
 	
 	@PostMapping
+	@CrossOrigin(origins =  "http://localhost:4200")
 	public ResponseEntity<ProyectoDTO> crearProyecto(@Validated @RequestBody ProyectoDTO proyectoDTO){
 		Proyecto proyecto = new Proyecto();
 		proyecto.setId(proyectoDTO.getId());
@@ -60,66 +63,90 @@ public class ProyectoRestController {
 	}
 	
 	@DeleteMapping(path = "/{id}")
+	@CrossOrigin(origins =  "http://localhost:4200")
 	public ResponseEntity borrarProyecto(@PathVariable Long id) {
 		proyectoService.borrarProyecto(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 	
 	@PutMapping(path = "/{id}")
+	@CrossOrigin(origins =  "http://localhost:4200")
 	public ResponseEntity actualizarProyecto(@PathVariable Long id, @RequestBody ProyectoDTO proyectoDTO) {
-		Proyecto proyecto= proyectoService.listarProyectosPorId(id);
+		try {
+		Proyecto proyecto= proyectoService.buscarProyectosPorId(id);
 		proyecto.setId(proyectoDTO.getId());
 		proyecto.setNombre(proyectoDTO.getNombre());
 		proyecto.setHorasAsignadasProyecto(proyectoDTO.getHorasAsignadasProyecto());
 		proyecto.setIdUsuarioResponsable(proyectoDTO.getIdUsuarioResponsable());
 		proyectoService.actualizarProyecto(proyecto);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		}catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+		}
 	}
 
 	
 	@GetMapping(path = "/{id}")//manejar excepcion si no encuentra el proyecto
-	public ResponseEntity <ProyectoDTO > listarProyectosPorId(@PathVariable Long id){
-			Proyecto proyecto = proyectoService.listarProyectosPorId(id);
-			ProyectoDTO proyectoDTO = new ProyectoDTO(proyecto);
-			tareaService.listarTareasPorProyecto(id);
-			return ResponseEntity.ok(proyectoDTO);
+	@CrossOrigin(origins =  "http://localhost:4200")
+	public ResponseEntity <ProyectoDTO > buscarProyectosPorId(@PathVariable Long id){
+			try {
+				Proyecto proyecto = proyectoService.buscarProyectosPorId(id);
+				ProyectoDTO proyectoDTO = new ProyectoDTO(proyecto);
+				return ResponseEntity.ok(proyectoDTO);
+			} catch (Exception e) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+			}
+			
 	}
 	
 	@GetMapping(path = "/{id}/tareasporproyecto")
-	public ResponseEntity <List<TareaDTO>> listarTareasPorProyecto(@PathVariable Long id){
-			Proyecto proyecto = proyectoService.listarProyectosPorId(id);
-			List<Tarea> tareas = new ArrayList(tareaService.listarTareasPorProyecto(id));
+	public ResponseEntity <List<TareaDTO>> buscarTareasPorProyecto(@PathVariable Long id){
+			try {
+			Proyecto proyecto = proyectoService.buscarProyectosPorId(id);
+			List<Tarea> tareas = new ArrayList(tareaService.buscarTareasPorProyecto(id));
 			List<TareaDTO> tareasDTO = new ArrayList<TareaDTO>();
 			for(Tarea t : tareas) {
 				tareasDTO.add(new TareaDTO(t));
 			}
 			return ResponseEntity.ok(tareasDTO);
+			} catch (Exception e) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+			}
 	}
 	
 	
 	
 	@GetMapping(path = "/buscador")
 	public ResponseEntity <List<ProyectoDTO>> buscarProyectosPorNombre(@RequestParam String nombre){
+		try {
 		List<Proyecto> proyectos = proyectoService.buscadorDeProyectos(nombre);
 		List<ProyectoDTO>proyectosDTO = new ArrayList<ProyectoDTO>();
 		for(Proyecto p : proyectos) {
 			proyectosDTO.add(new ProyectoDTO(p));
 		}
 		return ResponseEntity.ok(proyectosDTO);
+		}catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+		}
 	}
 	
 	
 	@PutMapping(path = "/{id}/agregarusuario/{idUsuario}")
 	public ResponseEntity <Long> asignarUsuario(@PathVariable Long id ,@PathVariable Long idUsuario){
+		try {
 		proyectoService.asignarUsuario(id, idUsuario);
 		return  ResponseEntity.ok(id);
+		}catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+		}
 	}
 	
 	
 	@PostMapping(path = "/{id}/tareas")
 	public ResponseEntity <TareaDTO>altaTarea(@PathVariable Long id , @Validated @RequestBody TareaDTO tareaDTO ) {
 		Tarea tarea =  new Tarea();
-		Proyecto proyecto = proyectoService.listarProyectosPorId(id);	
+		try {
+		Proyecto proyecto = proyectoService.buscarProyectosPorId(id);	
 		tarea.setProyecto(proyecto);
 		tarea.setId(tareaDTO.getId());
 		tarea.setHorasAsignadas(tareaDTO.getHorasAsignadas());
@@ -130,6 +157,8 @@ public class ProyectoRestController {
 			proyecto.agregarTarea(tarea);
 			return ResponseEntity.status(HttpStatus.CREATED).body(tareaDTO);
 		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+		}}catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
 		}
 	}
